@@ -1,11 +1,18 @@
 <!-- Title -->
 # AI security cameras
+### Website Preview
+<p align="center"> 
+  <kbd>
+    <a href="https://varadbhogayata.github.io" target="_blank"><img src="examples/preview.gif">
+  </a>
+  </kbd>
+</p>
 
 **Requirements**
--**Camera compatible with RTSP protocol**
--**Flask**
--**python**
--**telegram bot**
+- **Camera compatible with RTSP protocol**
+- **Flask**
+- **python**
+- **telegram bot**
 
 
 <!-- About the Project -->
@@ -16,7 +23,7 @@ This project has the main goal to send notifications from telegram to N users us
 
 <!-- Features -->
 ## Key Features 🌟
--**Notifications by telegram**: You can set notifications using telegram API
+- **Notifications by telegram**: You can set notifications using telegram API
 - **User Authentication**: Secure user authentication using Flask and Werkzeug.
 - **Modern UI**: Professionally designed login and signup forms with Tailwind CSS.
 - **Responsive**: Works seamlessly on various screen sizes.
