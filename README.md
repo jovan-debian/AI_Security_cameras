@@ -1,18 +1,22 @@
 <!-- Title -->
-# Flask Login Template
+# AI security cameras
 
-<!-- Badges -->
-![Made with Python](https://img.shields.io/badge/made%20with-Python-blue.svg)
-![License MIT](https://img.shields.io/badge/license-MIT-green.svg)
+**Requirements**
+Camera compatible with RTSP protocol
+Flask
+python
+telegram bot
+
 
 <!-- About the Project -->
 ## About the Project 🚀
 
-Flask Login Template is a simple and customizable authentication template built with Flask and Tailwind CSS. It provides a user-friendly login and signup experience with modern UI elements and features.
+This project has the main goal to send notifications from telegram to N users using recognition and detection of faces.
+ 
 
 <!-- Features -->
 ## Key Features 🌟
-
+-**Notifications by telegram**: You can set notifications using telegram API
 - **User Authentication**: Secure user authentication using Flask and Werkzeug.
 - **Modern UI**: Professionally designed login and signup forms with Tailwind CSS.
 - **Responsive**: Works seamlessly on various screen sizes.
@@ -23,11 +27,10 @@ Flask Login Template is a simple and customizable authentication template built 
 To get started, follow these steps:
 
 1. Clone the repository.
-   ```bash
-   git clone https://github.com/ichliebees/Login-Template-Flask.git
-   ```
 
-2. Run the application.
+2. You need to install python > 3.7, Flask, yolo11n.pt and create a bot on telegram to recieve your notificarions
+
+3. Run the application.
    ```bash
    python main.py
    ```

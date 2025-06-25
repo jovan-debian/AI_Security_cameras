@@ -55,7 +55,7 @@ class CameraDetectionService:
             # Object tracking
             
             #Set telegram bot 
-            self.telegram_notifier = TelegramNotifier(bot_token='8037991386:AAGfIkEFKA-kTjeVlqiL_xTSaY8u3XJ-rUc', chat_id='6346231670')
+            self.telegram_notifier = TelegramNotifier(bot_token='SET YOUR TOKEN', chat_id='SET YOUR CHATId')
 
           
 
