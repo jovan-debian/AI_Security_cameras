@@ -32,7 +32,7 @@
 <!-- About the Project -->
 ## About the Project 🚀
 
-This project has the main goal to send notifications from telegram to N users using recognition and detection of faces.
+This project has the main goal to send notifications from telegram to N users using recognition and detection of faces to alert when there is a stranger in a range o vision's camera.
  
 
 <!-- Features -->
@@ -88,9 +88,12 @@ This template follows security best practices:
 Always stay informed about the latest security updates and adapt the template accordingly.
 
 
-
+<!--Flask Template -->
+You can get the original template of the user interface here:
+[https://github.com/wa0101/Login-Template-Flask](https://github.com/wa0101/Login-Template-Flask)
 
 <!-- License -->
+
 ## License 📄
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
