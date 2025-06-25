@@ -88,7 +88,9 @@ This template follows security best practices:
 Always stay informed about the latest security updates and adapt the template accordingly.
 
 
-<!--Flask Template -->
+<!-- Flask Template -->
+## Flask Template
+
 You can get the original template of the user interface here:
 [https://github.com/wa0101/Login-Template-Flask](https://github.com/wa0101/Login-Template-Flask)
 
