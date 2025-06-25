@@ -2,10 +2,10 @@
 # AI security cameras
 
 **Requirements**
-Camera compatible with RTSP protocol
-Flask
-python
-telegram bot
+-**Camera compatible with RTSP protocol**
+-**Flask**
+-**python**
+-**telegram bot**
 
 
 <!-- About the Project -->
