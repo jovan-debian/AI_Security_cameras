@@ -7,6 +7,20 @@
   </a>
   </kbd>
 </p>
+<p align="center"> 
+  <kbd>
+    <img src="camara_crud.png">
+  </a>
+  </kbd>
+</p>
+<p align="center"> 
+  <kbd>
+    <img src="optusersA.png">
+  </a>
+  </kbd>
+</p>
+
+
 
 **Requirements**
 - **Camera compatible with RTSP protocol**
