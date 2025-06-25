@@ -1,0 +1,10 @@
+
+/__pycache__/
+/bin/
+/include/
+/lib/
+/lib64/
+/share/
+yolo11n.pt
+yolov5su.pt
+yolo11n-face.pt

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        background-color: green;
+        border-radius: 50%;
+    }
+    .carousel-control-prev, .carousel-control-next {
+        width: 50px;
+        height: 50px;
+    }
+    .camera-container {
+        width: 80%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .camera-stream {
+        max-height: 500px;
+        width: 100%;
+        object-fit: cover;
+    }
+</style>
+
+<div class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+    <button onclick="location.href='{{ url_for('dashboard') }}'" 
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Volver al menú
+    </button>
+</div>
+
+<div class="flex flex-col items-center bg-gray-900 text-white gap-2 p-4">
+    <h2 class="text-2xl font-semibold mb-2">Video en vivo</h2>
+
+    <div class="camera-container">
+        <div id="cameraCarousel" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner">
+                {% for camera in cameras %}
+                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" 
+                     data-camera-url="{{ camera.url }}">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-2">Cámara {{ camera.id }}</h3>
+                        {% if loop.index == 1 %}
+                            <img src="{{ url_for('stream_camera') }}?camera_url={{ camera.url | urlencode }}" 
+                                 class="camera-stream d-block w-100 rounded-lg"
+                                 alt="Camera Stream">
+                        {% else %}
+                            <div class="placeholder-stream rounded-lg" 
+                                 style="height: 500px; background-color: #2d3748; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center">
+                                    <i class="fas fa-video fa-3x mb-2"></i>
+                                    <p>Camera feed will load when active</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if cameras|length > 1 %}
+            <button class="carousel-control-prev" type="button" 
+                    data-bs-target="#cameraCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" 
+                    data-bs-target="#cameraCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.getElementById('cameraCarousel');
+        
+        carousel.addEventListener('slide.bs.carousel', function(e) {
+            const nextSlide = e.relatedTarget;
+            const cameraUrl = nextSlide.dataset.cameraUrl;
+            
+            let streamImg = nextSlide.querySelector('.camera-stream');
+            const placeholder = nextSlide.querySelector('.placeholder-stream');
+            
+            if (!streamImg && placeholder) {
+                streamImg = document.createElement('img');
+                streamImg.className = 'camera-stream d-block w-100 rounded-lg';
+                streamImg.alt = 'Camera Stream';
+                // Use encodeURIComponent to properly encode the full URL
+                streamImg.src = `/stream_camera?camera_url=${encodeURIComponent(cameraUrl)}`;
+                placeholder.replaceWith(streamImg);
+            }
+        });
+        
+        carousel.addEventListener('slid.bs.carousel', function(e) {
+            const slides = carousel.querySelectorAll('.carousel-item:not(.active)');
+            slides.forEach(slide => {
+                const streamImg = slide.querySelector('.camera-stream');
+                if (streamImg) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'placeholder-stream rounded-lg';
+                    placeholder.style = 'height: 500px; background-color: #2d3748; display: flex; align-items: center; justify-content: center;';
+                    placeholder.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-video fa-3x mb-2"></i>
+                            <p>Camera feed will load when active</p>
+                        </div>
+                    `;
+                    streamImg.replaceWith(placeholder);
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}

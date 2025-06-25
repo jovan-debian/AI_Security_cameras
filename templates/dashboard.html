@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex justify-center items-center">
+    <h2 class="text-3xl font-semibold mb-6">Menú</h2>
+</div>
+
+<div class="flex flex-col items-center justify-center bg-gray-900 text-white p-6">
+    <!-- Contenedor de botones responsivo -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-8 w-full max-w-2xl">
+        
+        <!-- Botón para agregar cámaras -->
+        <button 
+            onclick="location.href='{{ url_for('camera_opt') }}'" 
+            class="w-48 sm:w-56 lg:w-64 min-w-[180px] bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl text-center whitespace-normal break-words">
+            Agregar Cámaras
+        </button>
+
+        <!-- Botón para ver cámaras -->
+        <button 
+            onclick="location.href='{{ url_for('view_cameras') }}'" 
+            class="w-48 sm:w-56 lg:w-64 min-w-[180px] bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg text-xl text-center whitespace-normal break-words">
+            Ver <br> Cámaras 
+        </button>
+
+        <!-- Botón para superAdmin -->
+        {% if role == 'superAdmin' %}
+        <button 
+            onclick="location.href='{{ url_for('optionsUsers') }}'" 
+            class="w-48 sm:w-56 lg:w-64 min-w-[180px] bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl text-center whitespace-normal break-words">
+            Administrar Usuarios
+        </button>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

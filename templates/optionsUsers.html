@@ -1,0 +1,365 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+    <button 
+        onclick="location.href='{{ url_for('dashboard') }}'" 
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 ">
+        Volver al menú
+    </button>
+</div>
+
+<!-- agregar usuario -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold text-white-800">Usuarios en el sistema</h2>
+            <button type="button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal" data-bs-target="#myModal">
+                Agregar usuario
+            </button>
+        </div>
+        
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissable" role="alert">
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label ="close">
+           
+                    <span aria-hidden="true">&times;</span>
+           
+                </button>
+                {{message}}
+                <script>
+                // Remove the flash message after 3 seconds
+                setTimeout(function() {
+                    var flashMessage = document.getElementById('flashMessage');
+                    if (flashMessage) {
+                        flashMessage.style.opacity = '0';
+                        setTimeout(function() {
+                            flashMessage.remove();
+                        }, 0); // Fade out animation duration
+                    }
+                }, 300);
+            </script>   
+            {% endfor %}
+                 
+        {% endif %}
+    {% endwith %}
+
+
+</div>
+</div>
+{% if error %}
+                <div class="bg-red-500 text-white p-3 mb-4">
+                    {{ error }}
+                </div>
+            {% endif %}
+<!--lista-->
+<table class="container mx-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+  <th scope="col" class="px-6 py-3">Usuario</th>
+  <th scope="col" class="px-6 py-3">nivel</th>
+  <th scope="col" class="px-6 py-3">Action</th>
+
+
+</tr>
+</thead>
+<tbody>
+    
+
+    {% for row in userL %}
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td class="px-6 py-4">{{row.id}}</td>
+        <td class="px-6 py-4">{{row.role}}</td>
+        <td class="flex items-center px-6 py-4 space-x-4">
+            
+            
+            <a href="#" class="fa-regular fa-image text-2xl" data-bs-toggle="modal" data-bs-target="#modalpicture{{row.id}}"></a>
+            <a href="#" class="fa-solid fa-user-pen text-2xl" data-bs-toggle="modal" data-bs-target="#modaledit{{row.id}}"></a>
+            <a href="/delete/{{ row.id }}" class="fa-solid fa-trash text-2xl" onclick="return confirm('Estas seguro de eliminar a {{ row.id }} ?')"></a>
+
+        </td>
+        
+    </tr>
+
+    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+
+
+<div class="modal-dialog">
+
+
+<div class="modal-content">
+
+
+    <div class="modal-header">
+        <h5 class="modal-title" style="color: black;"id="modalLabel">Actualizar Datos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+<div class="modal-body">
+
+
+<form action="{{ url_for('update') }}" method="POST">
+
+
+   <div class="form-group">
+
+        
+                   
+        <label style="color: black;">Nombre:</label>
+       <input type="hidden"  name="idUpdate" value="{{row.id}}">
+
+      <input type="text" class="form-control" name="nameUpdate" value="{{row.id}}" required="1">
+
+
+   </div>
+
+
+
+   <div class="form-group">
+
+
+    <label style="color: black;">Contraseña:</label>
+
+      <input type="text" class="form-control" name="passwordUpdate" value="" required="1">
+
+
+   </div>
+
+
+   <div class="form-group">
+
+
+    <label style="color: black;">Nivel:</label>
+    <select class="form-control" name="roleUpdate">
+        <option value="superAdmin" {% if row.role == "superAdmin" %}selected{% endif %}>superAdmin</option>
+        <option value="user" {% if row.role == "user" %}selected{% endif %}>user</option>
+    </select>
+    
+
+      
+
+
+   </div>
+
+
+   <div class="form-group">
+
+
+      <button class="btn btn-primary" type="submit">Actualizar</button>
+
+
+   </div>
+
+
+</form>
+
+
+</div>
+
+
+<div class="modal-footer">
+
+
+<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<div id="modalpicture{{row.id}}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: black;"id="modalLabel">Imágenes de {{row.id}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+       
+
+            <div class="modal-body">
+                <div class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+                    <div class="w-full max-w-md">
+                        <h2 class="text-2xl font-bold mb-4">Agregar Imagen</h2>
+                        
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="bg-green-500 text-white p-3 rounded mb-4">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        
+                        <form action="{{ url_for('add_face') }}" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="name" class="block text-sm font-medium">Nombre</label>
+                                <input type="text" class="form-control" name="name" id="name" value="{{row.id}}" required = "1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="face_image" class="block text-sm font-medium">Imagen del rostro</label>
+                                <input type="file" class="form-control" name="face_image" id="face_image" required accept="image/*">
+                            </div>
+                            <div class="form-group">
+
+                            <button type="submit" 
+                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                                Agregar rostro
+                            </button>
+                            </div>
+                        </form>
+                        
+                        {% if known_faces %}
+                            <div class="mt-8">
+                                <h3 class="text-xl font-semibold mb-4">Rostros cargados</h3>
+                                <ul class="space-y-2">
+                                    {% for name, count in known_faces.items() %}
+                                    {% if name == row.id %}
+                                        <li class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                                            <span>{{ name }} ({{ count }}/5 images)</span>
+                                            <form method="POST" action="{{ url_for('remove_face', name=name) }}" class="inline">
+                                                <button type="submit" 
+                                                        class="text-red-500 hover:text-red-400"
+                                                        onclick="return confirm('Are you sure you want to remove all faces for {{ name }}?')">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+
+
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+                
+                
+                </div>
+                </div>
+</div>
+</div>
+
+    {% endfor  %}
+
+
+    </tbody>
+
+
+</table>
+
+{#MOdal para agregar usuarios#}
+<div id="myModal" class="modal fade" role="dialog">
+
+
+    <div class="modal-dialog">
+ 
+ 
+       <div class="modal-content">
+ 
+ 
+        <div class="modal-header">
+            <h5 class="modal-title" style="color: black;"id="modalLabel">Ingresa un nuevo usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+ 
+ 
+          <div class="modal-body">
+ 
+            {#<!--<form action="{{ url_for('insert') }}" method="POST">--> #}
+             <form action="{{ url_for('insert') }}" method="POST">
+ 
+ 
+                <div class="form-group">
+ 
+ 
+                   <label style="color: black;">Nombre:</label>
+                   <input type="text" class="form-control" name="name" required="1">
+ 
+ 
+                </div>
+ 
+ 
+                 <div class="form-group">
+ 
+ 
+                   <label style="color: black;">Contraseña:</label>
+                   <input type="text" class="form-control" name="password" required="1">
+ 
+ 
+                </div>
+                <div class="form-group">
+ 
+ 
+                    <label style="color: black;">Nivel:</label>
+                    <select class="form-control" name="role"  required>
+                        <option value="" disabled selected>Select role</option>
+                        <option value="superAdmin">superAdmin</option>
+                        <option value="user">user</option>
+                    </select>
+  
+  
+                 </div>
+                <div><p></p></div>
+                <div class="form-group">
+ 
+ 
+                   <button class="btn btn-primary" type="submit">Agregar</button>
+ 
+ 
+                </div>
+ 
+ 
+             </form>
+ 
+ 
+          </div>
+ 
+ 
+          <div class="modal-footer">
+ 
+ 
+             <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+ 
+ 
+          </div>
+ 
+ 
+       </div>
+ 
+ 
+    </div>
+ 
+ 
+ </div>
+
+
+
+
+{% endblock %}
+
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

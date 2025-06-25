@@ -1,0 +1,6 @@
+{
+    "jovan": {
+        "password": "scrypt:32768:8:1$o60AkiXA0VGStixq$1fcb925a0e326caae3dc44339d5418f4d561832968ac9b4b04c9bf231ee66aa7f06f40720115eaa1233dbc8f9709c5e8222365c34678458159afeb33dc3ec733",
+        "role": "superAdmin"
+    }
+}

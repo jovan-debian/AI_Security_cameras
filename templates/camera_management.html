@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+    <button onclick="location.href='{{ url_for('dashboard') }}'" 
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Volver al menú
+    </button>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-white">Administración de Cámaras</h2>
+        <button type="button" 
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                data-bs-toggle="modal" 
+                data-bs-target="#addCameraModal">
+            Agregar Cámara
+        </button>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="bg-green-500 text-white p-4 rounded-md mb-4 flex justify-between items-center">
+                    {{ message }}
+                    <button class="text-white" onclick="this.parentElement.remove()">×</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Contenedor con desplazamiento horizontal en móviles -->
+    <div class="bg-gray-800 rounded-lg shadow overflow-x-auto">
+        <table class="min-w-full table-auto divide-y divide-gray-700">
+            <thead class="bg-gray-700">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider">Camera ID</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider">URL</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider">Estatus</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider">Acción</th>
+                </tr>
+            </thead>
+            <tbody class="bg-gray-800 divide-y divide-gray-700">
+                {% for camera in cameras %}
+                <tr>
+                    <td class="px-4 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-300">{{ camera.id }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-300">{{ camera.url }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if camera.status == 'active' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ camera.status }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-xs sm:text-sm font-medium space-x-2">
+                        {% if camera.status == 'active' %}
+                            <button onclick="stopCamera('{{ camera.id }}')"
+                                    class="text-red-500 hover:text-red-700">
+                                Stop
+                            </button>
+                        {% else %}
+                            <button onclick="startCamera('{{ camera.id }}')"
+                                    class="text-green-500 hover:text-green-700">
+                                Start
+                            </button>
+                        {% endif %}
+                        <button onclick="deleteCamera('{{ camera.id }}')"
+                                class="text-red-500 hover:text-red-700">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Camera Modal -->
+<div class="modal fade" id="addCameraModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-gray-800">
+            <div class="modal-header border-gray-700">
+                <h5 class="modal-title text-white">Agregar Nueva Cámara</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCameraForm" action="{{ url_for('add_camera') }}" method="POST">
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="camera_url">
+                            RTSP URL
+                        </label>
+                        <input type="text" 
+                               id="camera_url" 
+                               name="camera_url" 
+                               class="form-input bg-gray-700 text-white border-gray-600 w-full"
+                               placeholder="rtsp://username:password@ip:port/stream">
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" 
+                                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                            Agregar Cámara
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function startCamera(cameraId) {
+    fetch(`/start_camera/${cameraId}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to start camera');
+            }
+        });
+}
+
+function stopCamera(cameraId) {
+    fetch(`/stop_camera/${cameraId}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to stop camera');
+            }
+        });
+}
+
+function deleteCamera(cameraId) {
+    if (confirm('¿Estás seguro de eliminar esta cámara?')) {
+        fetch(`/delete_camera/${cameraId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete camera');
+                }
+            });
+    }
+}
+</script>
+{% endblock %}
